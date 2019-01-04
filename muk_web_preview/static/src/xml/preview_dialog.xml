@@ -27,6 +27,8 @@
 	                <button type="button" class="preview-dialog-btn preview-minimize" aria-hidden="true"><i class="fa fa-minus"></i></button>
 	                <a class="preview-dialog-btn preview-download" aria-hidden="true" t-att-href="url"><i class="fa fa-download"></i></a>
 	                <button type="button" class="preview-dialog-btn preview-print" aria-hidden="true"><i class="fa fa-print"></i></button>
+	                <button type="button" class="preview-dialog-btn preview-right" aria-hidden="true"><i class="fa fa-arrow-right"></i></button>
+	                <button type="button" class="preview-dialog-btn preview-left" aria-hidden="true"><i class="fa fa-arrow-left"></i></button>
 	                <h4 class="modal-title preview-title"><t t-raw="title"/></h4>
 	            </div>
 	            <div class="modal-body preview-body">

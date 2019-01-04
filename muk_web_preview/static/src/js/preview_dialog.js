@@ -56,11 +56,16 @@ var PreviewDialog = Widget.extend({
     },
     start: function() {
     	var self = this;
+
+		self.attachments_list = [];
+		$('.o_sidebar_preview_attachment').each(function(){self.attachments_list.push(($(this).data('id')))});
         return this._super().then(function() {
         	self.$modal.on('hidden.bs.modal', _.bind(self.destroy, self));
         	self.$modal.find('.preview-maximize').on('click', _.bind(self.maximize, self));
         	self.$modal.find('.preview-minimize').on('click', _.bind(self.minimize, self));
         	self.$modal.find('.preview-print').on('click', _.bind(self.print, self));
+        	self.$modal.find('.preview-left').on('click', _.bind(self.prev, self));
+        	self.$modal.find('.preview-right').on('click', _.bind(self.next, self));
         });
     },
     renderElement: function() {
@@ -116,6 +121,30 @@ var PreviewDialog = Widget.extend({
     		});
     	}
     },
+    prev: function(e) {
+        var self = this;
+        var curr = parseInt(self.url.split('?')[0].split('/').slice(-1)[0]);
+        if (curr && this.attachments_list.indexOf(curr) > 0) {
+            var prev_id = this.attachments_list[this.attachments_list.indexOf(curr) - 1];
+            this.url = this.url.replace(curr, prev_id);
+            $('a.preview-download').attr('href', this.url)
+            this.title = $('a[href$="'+ this.url +'"]').text();
+            $('h4.modal-title')[0].innerText=$.trim(this.title);
+            this.renderElement()
+        }
+    },
+    next: function(e) {
+        var self = this;
+        var curr = parseInt(self.url.split('?')[0].split('/').slice(-1)[0]);
+        if (curr && this.attachments_list.length > this.attachments_list.indexOf(curr)+1) {
+            var next_id = this.attachments_list[this.attachments_list.indexOf(curr) + 1];
+            this.url = this.url.replace(curr, next_id);
+            $('a.preview-download').attr('href', this.url)
+            this.title = $('a[href$="'+ this.url +'"]').text();
+            $('h4.modal-title')[0].innerText=$.trim(this.title);
+            this.renderElement()
+        }
+    },
     opened: function (handler) {
         return (handler)? this._opened.then(handler) : this._opened;
     },
@@ -123,6 +152,7 @@ var PreviewDialog = Widget.extend({
     	this.destroy();
     },
     destroy: function (reason) {
+	    this.attachments_list = [];
         if (!this.__closed) {
             this.__closed = true;
             this.trigger("closed", reason);
